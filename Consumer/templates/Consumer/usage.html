@@ -1,0 +1,212 @@
+{% extends 'Consumer/base.html' %}
+{% block content %}
+<!DOCTYPE HTML>
+<html>
+<head>
+
+	<script>
+
+		function mname(x){
+			var name = '';
+			switch(x){
+				case '1' : 
+					name =  "January";
+					break;
+				case '2' : 
+					name =  "February";
+					break;
+				case '3' :
+					name = 'March';
+					break;
+				case '4' : 
+					name = 'April';
+					break;
+			}
+			return name;
+		}
+		function hname(y){
+			var name = '';
+			switch(y){
+				case '0':
+					name = '12A.M.'
+					break;
+				case '1':
+				case '2':
+				case '3':
+				case '4':
+				case '5':
+				case '6':
+				case '7':
+				case '8':
+				case '9':
+				case '10':
+				case '11':
+					name = y+'A.M.'
+					break;
+				default : 
+					name = (24-y)+'P.M.'
+			}
+			return name;
+		}
+		function show(data,data1,data2) {
+
+		//document.getElementById('month').innerHTML = JSON.stringify(data);
+		var dataPoints = [];
+
+		var chart = new CanvasJS.Chart("chartContainer", {
+			animationEnabled: true,
+			theme: "light2",
+			title: {
+				text: "Monthly Power Consumption"
+			},
+			axisY: {
+				title: "Units",
+				titleFontSize: 24
+			},	
+			axisX: {
+				title: "Months",
+				titleFontSize: 24
+			},
+			data: [{
+				type: "column",
+				yValueFormatString: "#,### Units",
+				dataPoints: dataPoints
+			}]
+		});
+		arr = [];
+		for (var x in data){
+			arr.push(x);
+		}
+		for (var i = 0; i < Object.keys(data).length; i++) {
+			dataPoints.push({
+				label: mname(arr[i]),
+				y: parseFloat(data[arr[i]])
+			});
+		}
+		
+		var dataPoints1 = [];
+		var chart1 = new CanvasJS.Chart("chartContainer1", {
+			animationEnabled: true,
+			theme: "light2",
+			title: {
+				text: "Daily Power Consumption"
+			},
+			axisY: {
+				title: "Units",
+				titleFontSize: 24
+			},
+			axisX: {
+				title: "Days",
+				titleFontSize: 24
+			},
+			data: [{
+				type: "column",
+				yValueFormatString: "#,### Units",
+				dataPoints: dataPoints1
+			}]
+		});
+		arr1 = [];
+		for (var x in data1){
+			arr1.push(x);
+		}
+		for (var i = 0; i < Object.keys(data1).length; i++) {
+			dataPoints1.push({
+				label: arr1[i],
+				y: parseFloat(data1[arr1[i]])
+			});
+		}
+		
+		var dataPoints2 = [];
+		var chart2 = new CanvasJS.Chart("chartContainer2", {
+			animationEnabled: true,
+			theme: "light2",
+			title: {
+				text: "Hourly Power Consumption"
+			},
+			axisY: {
+				title: "Units",
+				titleFontSize: 24
+			},
+			axisX: {
+				title: "Hours",
+				titleFontSize: 24
+			},
+			data: [{
+				type: "column",
+				yValueFormatString: "#,### Units",
+				dataPoints: dataPoints2
+			}]
+		});
+		arr2 = [];
+		for (var x in data2){
+			arr2.push(x);
+		}
+		for (var i = 0; i < Object.keys(data2).length; i++) {
+			dataPoints2.push({
+				label: hname(arr2[i]),
+				y: parseFloat(data2[arr2[i]])
+			});
+		}
+
+
+		var chart3 = new CanvasJS.Chart("chartContainer3", {
+			animationEnabled: true,
+			title:{
+				text: "Total Consumption",
+			//horizontalAlign: "left",
+				verticalAlign: "center",
+				dockInsidePlotArea: true
+			},
+			legend:{
+				maxwidth:100
+			},
+			data: [{
+				type: "doughnut",
+				startAngle: 60,
+				innerRadius: 130,
+				indexLabelPlacement:"inside",
+				indexLabelFontSize: 10,
+				indexLabelWrap: true,
+			//indexLabel: "{label} - #percent%",
+				toolTipContent: "<b>{label}:</b> {y} (#percent%)",
+				dataPoints: dataPoints1,
+			}],
+		});
+
+		chart3.render();
+
+
+		chart.render();
+		chart1.render();
+		chart2.render();
+		myPie.render();
+		
+	}
+	
+	//document.getElementById('month').innerHTML = dataPoints.keys().show();
+
+
+	//$.getJSON("http://localhost:8000/consumer/usage", addData);
+
+
+	
+	</script>
+</head>
+<body onload="show({{month}},{{day}},{{hr}})">
+	
+
+<p id='month'></p><!--
+<p id='month' value='{{contex}}'></p>-->
+<div id="chartContainer" style="height: 370px; width: 100%; margin:25px 0;"></div>
+<div id="chartContainer1" style="height: 370px; width: 100%; display:inline-block; margin:25px 0;"></div>
+<!---<button id="chartContainer1" onclick="show1({{day}})"></button>-->
+<div id="chartContainer2" style="height: 370px; width: 100%; display:inline-block; margin:25px 0;"></div>
+<div id="chartContainer3" style="height: 370px; width: 100%; display:inline-block; margin:25px 0;"></div>
+<canvas id='canvas' style="height: 370px; width: 100%; display:inline-block; margin:25px 0;"></canvas>
+<script src="https://canvasjs.com/assets/script/jquery-1.11.1.min.js"></script>
+<script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+
+</body>
+</html>
+{% endblock %}

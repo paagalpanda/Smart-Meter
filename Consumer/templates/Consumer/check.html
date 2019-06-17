@@ -1,0 +1,9 @@
+{% extends 'Consumer/base.html' %}
+{% load static %}
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    <input type="text" name="cno">
+    <input type="submit">
+</form>
+{% endblock %}

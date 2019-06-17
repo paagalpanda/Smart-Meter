@@ -1,0 +1,12 @@
+{% extends 'Consumer/base.html' %}
+{% block content %}
+{% for row in history %}
+{{row.k_no}}
+<br>
+{{row.pay_date}}
+<br>
+{{row.due_date}}
+<br>
+{{row.amount}}
+{% endfor %}
+{% endblock %}
